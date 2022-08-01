@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+#
+# kmsdecrypt: Decrypt the single argument for use in config files
+# Requires gcloud cli to be authenticated
+#
+# Usage: kmsdecrypt [env] [string]
+# env may be one of "dev", "prod"
+#
+# Example: kmsdecrypt dev NBNLM3Pc2OgwSIQA2ErexRXaQVYPXSB3GXxVZDs0sr2nQN5EyZicTVLQ==
+#
+case $1 in
+  dev) project=weather-confidence; keyring=main; key=main;;
+  prod) project=weather-confidence; keyring=main; key=prod;;
+  *)
+    echo "Invalid environment '$1': Please specify an env from [dev, prod]"
+    exit 1
+esac
+
+if [ -z ${2+x} ]; then
+  echo "$(cat)" | base64 -d | gcloud kms decrypt --plaintext-file=- --ciphertext-file=- \
+    --project=$project --location=global --keyring=$keyring --key=$key
+else
+  echo "$2" | base64 -d | gcloud kms decrypt --plaintext-file=- --ciphertext-file=- \
+    --project=$project --location=global --keyring=$keyring --key=$key
+fi
