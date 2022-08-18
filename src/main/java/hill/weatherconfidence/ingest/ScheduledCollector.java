@@ -1,5 +1,6 @@
 package hill.weatherconfidence.ingest;
 
+import hill.weatherconfidence.IKmsDecrypter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +13,13 @@ public class ScheduledCollector {
 
     private static Logger log = LoggerFactory.getLogger(ScheduledCollector.class);
 
-    @Autowired
-    private WebClient webClient;
+    private IKmsDecrypter kmsDecrypter;
+
+    public ScheduledCollector(IKmsDecrypter kmsDecrypter) {
+        this.kmsDecrypter = kmsDecrypter;
+    }
+
+    @Autowired private WebClient webClient;
 
     @Scheduled(cron = "${ingest.cron}")
     public void collectLatest() {
