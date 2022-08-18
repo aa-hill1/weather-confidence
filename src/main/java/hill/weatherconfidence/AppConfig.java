@@ -5,6 +5,7 @@ import com.google.cloud.kms.v1.KeyManagementServiceClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.IOException;
 
@@ -20,6 +21,11 @@ public class AppConfig {
     @Bean
     public IKmsDecrypter kmsDecrypter() {
         return new KmsDecrypter(kmsClient(), kmsKey(), environment);
+    }
+
+    @Bean
+    public WebClient webClient() {
+        return WebClient.create();
     }
 
     private KeyManagementServiceClient kmsClient() {

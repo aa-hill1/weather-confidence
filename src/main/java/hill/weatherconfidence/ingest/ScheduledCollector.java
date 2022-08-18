@@ -11,15 +11,16 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Component
 public class ScheduledCollector {
 
-    private static Logger log = LoggerFactory.getLogger(ScheduledCollector.class);
+    private static final Logger log = LoggerFactory.getLogger(ScheduledCollector.class);
 
-    private IKmsDecrypter kmsDecrypter;
+    private final IKmsDecrypter kmsDecrypter;
 
-    public ScheduledCollector(IKmsDecrypter kmsDecrypter) {
+    private final WebClient webClient;
+
+    public ScheduledCollector(IKmsDecrypter kmsDecrypter, WebClient webClient) {
         this.kmsDecrypter = kmsDecrypter;
+        this.webClient = webClient;
     }
-
-    @Autowired private WebClient webClient;
 
     @Scheduled(cron = "${ingest.cron}")
     public void collectLatest() {
