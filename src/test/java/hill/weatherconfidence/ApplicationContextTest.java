@@ -5,11 +5,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 
 @TestConfiguration
-public class TestApplicationContext {
+public class ApplicationContextTest {
 
     @Primary
     @Bean
     public IKmsDecrypter kmsDecrypter() {
-        return new TestKmsDecrypter();
+        return new DummyKmsDecrypter();
     }
 }

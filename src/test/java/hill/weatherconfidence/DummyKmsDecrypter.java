@@ -1,6 +1,6 @@
 package hill.weatherconfidence;
 
-public class TestKmsDecrypter implements IKmsDecrypter{
+public class DummyKmsDecrypter implements IKmsDecrypter{
     @Override
     public String getDecryptedApiKey() {
         return "foo";
