@@ -1,6 +1,7 @@
 package hill.weatherconfidence.ingest;
 
 import hill.weatherconfidence.IKmsDecrypter;
+import hill.weatherconfidence.ingest.forecast.ForecastResponse;
 import hill.weatherconfidence.ingest.model.GeocodeItem;
 import hill.weatherconfidence.ingest.model.GeocodeResponse;
 import org.slf4j.Logger;
@@ -33,6 +34,7 @@ public class ScheduledCollector {
         if (geocodeResponse != null) {
             locations.add(geocodeResponse.first());
         }
+        ForecastClient forecastClient = new ForecastClient(baseUrl, apiKey);
     }
 
 
