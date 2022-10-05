@@ -5,6 +5,10 @@ import hill.weatherconfidence.ingest.forecast.pointintimepred.PointInTimePredict
 
 import java.util.ArrayList;
 
+//TODO: This needs to reflect the fields that you'd get the top-level list.  Start off with just
+//int dt;
+//for now, then build up gradually.  Best to do this in a test.
+
 @JsonIgnoreProperties (ignoreUnknown = true)
 public class ForecastItem {
     private String cod;
@@ -37,7 +41,7 @@ public class ForecastItem {
         item.setCnt(0);
         item.setCod("0");
         item.setMessage(0);
-        item.setPredictions(new ArrayList<PointInTimePrediction>());
+        item.setPredictions(new ArrayList<>());
         item.setConfidence(new Confidence(/*Metrics for calculations == 0*/));
         return item;
     }
