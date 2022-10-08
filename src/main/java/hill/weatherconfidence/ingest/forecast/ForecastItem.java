@@ -11,38 +11,41 @@ import java.util.ArrayList;
 
 @JsonIgnoreProperties (ignoreUnknown = true)
 public class ForecastItem {
-    private String cod;
-    private int message;
-    private int cnt;
-    private ArrayList<PointInTimePrediction> predictions;
-    private Confidence confidence;
-
-    public String getCod() {return cod;}
-    public void setCod(String cod) {this.cod = cod;}
-    public int getMessage() {return message;}
-    public void setMessage(int message) {this.message = message;}
-    public int getCnt() {return cnt;}
-    public void setCnt(int cnt) {this.cnt = cnt;}
-    public ArrayList<PointInTimePrediction> getPredictions() {
-        return predictions;
-    }
-    public void setPredictions(ArrayList<PointInTimePrediction> predictions) {
-        this.predictions = predictions;
-    }
-    public Confidence getConfidence() {
-        return confidence;
-    }
-    public void setConfidence(Confidence confidence) {
-        this.confidence = confidence;
-    }
+    private int dt;
+    private String dt_txt;
+    private ForecastItemMain main;
+    //private ForecastWeather weather;
+    //private ForecastClouds clouds;
+    //private ForecastWind wind;
+    //private int visibility;
+    //private Double pop;
 
     public static ForecastItem defaultForecast() {
         ForecastItem item = new ForecastItem();
-        item.setCnt(0);
-        item.setCod("0");
-        item.setMessage(0);
-        item.setPredictions(new ArrayList<>());
-        item.setConfidence(new Confidence(/*Metrics for calculations == 0*/));
+        item.setDt(0);
+        item.setDt_txt("0000-00-00 00:00:00");
+        item.setMain(ForecastItemMain.defaultForecast());
         return item;
+    }
+
+    public int getDt() {
+        return dt;
+    }
+    public void setDt(int dt) {
+        this.dt = dt;
+    }
+
+    public String getDt_txt() {
+        return dt_txt;
+    }
+    public void setDt_txt(String dt_txt) {
+        this.dt_txt = dt_txt;
+    }
+
+    public ForecastItemMain getMain() {
+        return main;
+    }
+    public void setMain(ForecastItemMain main) {
+        this.main = main;
     }
 }

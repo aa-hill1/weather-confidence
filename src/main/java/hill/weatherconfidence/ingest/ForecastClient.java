@@ -1,6 +1,7 @@
 package hill.weatherconfidence.ingest;
 
 import hill.weatherconfidence.ingest.forecast.ForecastResponse;
+import hill.weatherconfidence.ingest.model.GeocodeItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -18,11 +19,13 @@ public class ForecastClient {
         this.appId = appId;
         this.webClient = WebClient.create();
     }
-    private Mono<ForecastResponse> forecast() {
-        log.info("Forecasting");
+    public Mono<ForecastResponse> forecast(GeocodeItem loc) {
+        log.info("Gettng forecast for {}", loc.getName());
         return webClient.get()
-                .uri(baseUrl+"/data/2.5/forecast?id=524901&appid={appId}", appId)
+                .uri(baseUrl+"/data/2.5/forecast?lat="+loc.getLat()+"&lon="+loc.getLon()+"&appid={appId}", appId)
                 .retrieve()
                 .bodyToMono(ForecastResponse.class);
     }
+
+
 }

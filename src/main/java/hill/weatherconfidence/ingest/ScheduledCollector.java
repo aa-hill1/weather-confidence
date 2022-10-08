@@ -4,6 +4,7 @@ import hill.weatherconfidence.IKmsDecrypter;
 import hill.weatherconfidence.ingest.forecast.ForecastResponse;
 import hill.weatherconfidence.ingest.model.GeocodeItem;
 import hill.weatherconfidence.ingest.model.GeocodeResponse;
+import hill.weatherconfidence.repository.ForecastRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,12 +20,16 @@ public class ScheduledCollector {
     private static final Logger log = LoggerFactory.getLogger(ScheduledCollector.class);
     private final IKmsDecrypter kmsDecrypter;
     private final String baseUrl;
+    private final ForecastRepository repository;
+
+    private ForecastClient forecastClient;
 
     private final List<GeocodeItem> locations = new ArrayList<>();
 
-    public ScheduledCollector(IKmsDecrypter kmsDecrypter, @Value("${weatherApi.baseUrl}") String baseUrl) {
+    public ScheduledCollector(IKmsDecrypter kmsDecrypter, @Value("${weatherApi.baseUrl}") String baseUrl, ForecastRepository repository) {
         this.kmsDecrypter = kmsDecrypter;
         this.baseUrl = baseUrl;
+        this.repository = repository;
     }
 
     private void init() {
@@ -34,7 +39,7 @@ public class ScheduledCollector {
         if (geocodeResponse != null) {
             locations.add(geocodeResponse.first());
         }
-        ForecastClient forecastClient = new ForecastClient(baseUrl, apiKey);
+        forecastClient = new ForecastClient(baseUrl, apiKey);
     }
 
 
@@ -46,7 +51,10 @@ public class ScheduledCollector {
         }
         locations.forEach(loc -> {
             log.info("Collecting forecast data for location " + loc.getName());
-            // TODO: Create a ForecastClient or PredictionClient a bit like the GeocodeClient and call it to get data
+            forecastClient.forecast(loc).doOnSuccess((forecast) -> {
+                repository.store(loc, forecast);
+                log.info("Stored");
+            });
         });
 
     }
